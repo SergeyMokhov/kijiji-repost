@@ -33,14 +33,18 @@ public class GenericPage {
         return new WebDriverWait(driver,timeOutSeconds, sleepInMillis);
     }
 
+    protected WebDriverWait createWaitDriver(int timeOutSeconds) {
+        return new WebDriverWait(driver,timeOutSeconds, 300);
+    }
+
     protected void executeJavascript(String script){
         JavascriptExecutor js = (JavascriptExecutor) getDriver();
         js.executeScript(script);
     }
 
     protected void clickOn(WebElement toClickOn) {
-            WebElement el = waitForElementToBeClickable(toClickOn);
-            el.click();
+        WebElement el = waitForElementToBeClickable(toClickOn);
+        el.click();
     }
 
     /**
@@ -90,7 +94,7 @@ public class GenericPage {
         return jsResponse;
     }
 
-    private String generateUglyXpath(WebElement childElement, String current) {
+    protected String generateUglyXpath(WebElement childElement, String current) {
         String childTag = childElement.getTagName();
         if(childTag.equals("html")) {
             return "/html[1]"+current;
@@ -119,39 +123,48 @@ public class GenericPage {
         return createWaitDriver().until(ExpectedConditions.presenceOfElementLocated(by));
     }
 
-    public WebElement waitForElementToBeClickable(WebElement element) {
+    protected boolean isElementPresentOnPage(By by, int timeout){
+        try {
+            List<WebElement> elements = createWaitDriver(timeout).until(ExpectedConditions.presenceOfAllElementsLocatedBy(by));
+        }catch (TimeoutException expected){
+            return false;
+        }
+        return true;
+    }
+
+    protected WebElement waitForElementToBeClickable(WebElement element) {
         return createWaitDriver().until(ExpectedConditions.elementToBeClickable(element));
     }
 
-    public WebElement waitForElementToBeVisible(WebElement element) {
+    protected WebElement waitForElementToBeVisible(WebElement element) {
         return createWaitDriver().until(ExpectedConditions.visibilityOf(element));
     }
 
-    public boolean waitForElementToBeInvisible(WebElement element){
+    protected boolean waitForElementToBeInvisible(WebElement element){
         return createWaitDriver().until(CustomExpectedConditions.inVisibilityOf(element));
     }
 
-    public boolean waitForElementToBeInvisible(WebElement element, int secondsToWait){
-            return createWaitDriver(secondsToWait, 300).until(CustomExpectedConditions.inVisibilityOf(element));
+    protected boolean waitForElementToBeInvisible(WebElement element, int secondsToWait){
+        return createWaitDriver(secondsToWait, 300).until(CustomExpectedConditions.inVisibilityOf(element));
     }
 
-    public List<WebElement> waitForElementsToBeVisible(List<WebElement> element) {
+    protected List<WebElement> waitForElementsToBeVisible(List<WebElement> element) {
         return createWaitDriver().until(ExpectedConditions.visibilityOfAllElements(element));
     }
 
-    public boolean waitForElementToStopMoving(WebElement element){
+    protected boolean waitForElementToStopMoving(WebElement element){
         return createWaitDriver().until(CustomExpectedConditions.elementHasStoppedMoving(element));
     }
 
-    public boolean waitForElementToDisappear(WebElement element, int secondsToWait) {
-            return createWaitDriver(secondsToWait, 300).until(ExpectedConditions.stalenessOf(element));
+    protected boolean waitForElementToDisappear(WebElement element, int secondsToWait) {
+        return createWaitDriver(secondsToWait, 300).until(ExpectedConditions.stalenessOf(element));
     }
 
-    public boolean waitForElementToBeEnabled(WebElement element, int secondsToWait){
-            return createWaitDriver(secondsToWait, 300).until(CustomExpectedConditions.elementToBeEnabled(element));
+    protected boolean waitForElementToBeEnabled(WebElement element, int secondsToWait){
+        return createWaitDriver(secondsToWait, 300).until(CustomExpectedConditions.elementToBeEnabled(element));
     }
 
-    public boolean waitForElementAttributeToContainValue(WebElement element,int secondsToWait, String attrName, String attrValue){
-            return createWaitDriver(secondsToWait, 300).until(CustomExpectedConditions.elementToContainAttributeValue(element, attrName, attrValue));
+    protected boolean waitForElementAttributeToContainValue(WebElement element,int secondsToWait, String attrName, String attrValue){
+        return createWaitDriver(secondsToWait, 300).until(CustomExpectedConditions.elementToContainAttributeValue(element, attrName, attrValue));
     }
 }

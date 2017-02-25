@@ -16,6 +16,8 @@ public class MyAdsPage extends Header{
     private List<WebElement> deleteButtons;
     @FindBy(how = How.ID, using = "DeleteSurveyOK")
     private WebElement deleteThisAdButton;
+    @FindBy(xpath = "header-link-post-ad")
+    private WebElement postAdButton;
 
     public MyAdsPage(WebDriver driver){
         super(driver);
@@ -33,6 +35,15 @@ public class MyAdsPage extends Header{
         waitForElementToBeEnabled(deleteThisAdButton, 1);
         clickOn(deleteThisAdButton);
         return this;
+    }
+
+    public boolean adExists(Ad ad){
+        return isElementPresentOnPage(By.xpath("//a[contains(text(),  '"+ad.getTitle()+"')]"), 1);
+    }
+
+    public SelectCategoryPage clickPostAd(){
+        clickOn(postAdButton);
+        return new SelectCategoryPage(getDriver());
     }
 
     /**

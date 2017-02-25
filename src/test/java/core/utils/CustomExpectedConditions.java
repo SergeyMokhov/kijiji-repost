@@ -22,16 +22,13 @@ public class CustomExpectedConditions {
                     try {
                         Thread.sleep(50);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
                     }
 
                     Point finalLocation = element.getLocation();
                     return initialLocation.equals(finalLocation);
                 } catch (WebDriverException ee) {
-                    ee.printStackTrace();
                     return false;
                 } catch (NullPointerException eee){
-                    eee.printStackTrace();
                     return true;
                 }
             }
@@ -47,7 +44,6 @@ public class CustomExpectedConditions {
                 try {
                     Thread.sleep(50);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
 
                 Dimension finalLocation = element.getSize();
@@ -68,8 +64,6 @@ public class CustomExpectedConditions {
                 try {
                     ((JavascriptExecutor) driver).executeScript(javaScript);
                 } catch (Exception e) {
-                    e.getMessage();
-                    e.printStackTrace();
                     return false;
                 }
                 return true;
@@ -95,7 +89,6 @@ public class CustomExpectedConditions {
                 } catch (NoSuchElementException e) {
                     throw e;
                 } catch (WebDriverException e) {
-                    System.out.println(String.format("WebDriverException thrown by findElement(%s). ", elementOnPage)+"\n"+e.toString());
                     throw e;
                 }
             }
